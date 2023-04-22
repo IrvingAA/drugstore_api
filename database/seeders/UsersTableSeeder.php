@@ -3,6 +3,7 @@
 namespace Database\Seeders;
 
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Facades\Hash;
 
 class UsersTableSeeder extends Seeder
 {
@@ -24,7 +25,7 @@ class UsersTableSeeder extends Seeder
                 'id' => 1,
                 'username' => 'richard',
                 'name' => 'Ricardo Saucedo',
-                'password' => encrypt('123456789$'),
+                'password' => Hash::make('123456789$'),
                 'cat_profile_id' => 1,
                 'is_active' => 1,
                 'remember_token' => NULL,
