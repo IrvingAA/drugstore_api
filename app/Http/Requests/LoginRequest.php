@@ -69,7 +69,7 @@ class LoginRequest extends FormRequest
                 if (Auth::attempt([
                         'username' => $userSystem->username,
                         'password' => $this->get('password')
-                    ]) && (($userSystem->is_active == 1) || $userSystem->is_active == true)) {
+                    ]) && ($userSystem->is_active) ){
                     RateLimiter::clear($this->throttleKey());
                     Auth::loginUsingId($userSystem->id);
                     $userSystem->is_logged_in = true;
@@ -141,18 +141,18 @@ class LoginRequest extends FormRequest
      */
     public function ensureIsNotActiveSession($user): void
     {
-        if ($user && $user->isLoggedIn) {
+        if ($user && $user->is_logged_in) {
             Auth::guard('web')->logout();
 
             DB::table('oauth_access_tokens')
                 ->where('user_id', $user->id)
                 ->update(['revoked' => true]);
 
-            DB::table('sessions')
+          /*  DB::table('sessions')
                 ->where('user_id', $user->id)
-                ->delete();
+                ->delete();*/
 
-            $user->isLoggedIn = false;
+            $user->is_logged_in = false;
             $user->save();
         }
     }

@@ -1,7 +1,9 @@
 <?php
 
 namespace App\Http\Traits;
+
 use App\Casts\CleanText;
+
 /**
  * Created by PhpStorm.
  * User: michelnogales@gmail.com
@@ -50,20 +52,12 @@ trait CustomModelLogic
         return $query->where(function ($q) use ($search) {
             $q->when(!empty($search), function ($query) use ($search) {
                 return $query->where('username', $search)
-                    ->orWhere('email', 'ILIKE', '%' . $search . '%')
-                    ->orWhere('first_name', 'ILIKE', '%' . $search . '%')
-                    ->orWhere('second_name', 'ILIKE', '%' . $search . '%')
+                    ->orWhere('name', 'LIKE', '%' . $search . '%')
                     ->orWhereHas('profile', function ($qq) use ($search) {
-                        return $qq->where('name', 'ILIKE', '%' . $search . '%');
+                        return $qq->where('name', 'LIKE', '%' . $search . '%');
                     })
-                    ->orWhereHas('unity', function ($qq) use ($search) {
-                        return $qq->where('name', 'ILIKE', '%' . $search . '%');
-                    })
-                    ->orWhereHas('area', function ($qq) use ($search) {
-                        return $qq->where('name', 'ILIKE', '%' . $search . '%');
-                    })
-                    ->orWhere(\DB::raw("concat(name,' ', \"first_name\",' ', \"second_name\")"),
-                        'ILIKE', '%' . $search . '%');
+                   /* ->orWhere(\DB::raw("concat(name,' ', \"first_name\",' ', \"second_name\")"),
+                        'ILIKE', '%' . $search . '%')*/;
             });
         });
     }

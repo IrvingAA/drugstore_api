@@ -21,7 +21,7 @@ class LoginController extends Controller
     {
         try {
             $request->authenticateSu();
-
+            User::$withoutAppends = false;
             $credentials = $request->validated();
             $user = User::where('username', strtoupper(trim($credentials['username'])))
                 ->orWhere('username', strtolower(trim($credentials['username'])))
@@ -94,7 +94,7 @@ class LoginController extends Controller
     {
         $user = User::find(Auth::user()->id);
 
-        $user->isLoggedIn = false;
+        $user->is_logged_in = false;
         $user->save();
 
         Auth::guard('web')->logout();
@@ -112,6 +112,7 @@ class LoginController extends Controller
     public function getUserInfo($userId): JsonResponse
     {
         try {
+            User::$withoutAppends = false;
             if (Auth::user()->id !== decrypt($userId)) {
 
                 Auth::guard('web')->logout();
@@ -188,7 +189,7 @@ class LoginController extends Controller
                 'is_active'
             ]
         )
-            ->with(['profile', 'roles'])
+            ->with(['profile'])
             ->find($id);
     }
 

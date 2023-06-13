@@ -53,7 +53,7 @@ use Eloquent;
  * @method static Builder|User whereUsername($value)
  * @mixin Eloquent
  * @property bool|null $is_logged_in
- * @method static Builder|User whereIsLoggedIn($value)
+ * @method static Builder|User whereis_logged_in($value)
  * @property-read string $hash_id
  * @property-read CatProfile $profile
  * @method static Builder|User search($search)
@@ -69,7 +69,7 @@ class User extends Authenticatable
 {
     use HasApiTokens, HasFactory, Notifiable, CustomModelLogic;
 
-    protected $appends = ['hash_id'];
+    protected $appends = ['hash_id','full_name'];
     protected $fillable = [
         'username',
         'name',
@@ -78,6 +78,7 @@ class User extends Authenticatable
     ];
     protected $hidden = [
         'password',
+        'id'
     ];
 
     public function profile(): BelongsTo
@@ -85,13 +86,4 @@ class User extends Authenticatable
         return $this->belongsTo(CatProfile::class, 'cat_profile_id');
     }
 
-    public function roles(): BelongsToMany
-    {
-        return $this->belongsToMany(
-            CatRole::class,
-            'user_roles',
-            'user_id',
-            'cat_role_id'
-        );
-    }
 }
