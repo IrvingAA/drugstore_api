@@ -1,9 +1,9 @@
 <?php
 
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\Admin\UserController;
+use App\Http\Controllers\Admin\ProductController;
 use App\Http\Controllers\Auth\LoginController;
-use App\Http\Controllers\UsersController;
+use Illuminate\Support\Facades\Route;
 
 /*
 |--------------------------------------------------------------------------
@@ -20,10 +20,14 @@ Route::post('login', [LoginController::class, 'login']);
 
 Route::middleware('auth:api')->group(function () {
     Route::post('logout', [LoginController::class, 'logout']);
+    //Users
     Route::get('user/{id}', [LoginController::class, 'getUserInfo']);
-    Route::resource('users',UsersController::class);
-    Route::post('active-user/{id}', [UsersController::class, 'activeUser']);
+    Route::resource('users', UserController::class);
+    Route::post('active-user/{id}', [UserController::class, 'activeUser']);
+    //Products
+    Route::resource('products', ProductController::class);
 
-    Route::get('user-catalogs', [UsersController::class,'userCatalogs']);
+
+    Route::get('user-catalogs', [UserController::class, 'userCatalogs']);
 
 });
